@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Books - Library System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap">
+    <link href="../assets/img/Logo.jpg" rel="icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        .book-card {
+            transition: all 0.3s ease;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .status-badge.available {
+            background-color: #10b981;
+            color: white;
+        }
+        .status-badge.unavailable {
+            background-color: #ef4444;
+            color: white;
+        }
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 0.25rem;
+            border: 1px solid #d1d5db;
+        }
+        .pagination-btn.active {
+            background-color: #d97706;
+            color: white;
+            border-color: #d97706;
+        }
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-[#3a2e26] text-white flex-shrink-0">
+            <div class="p-4 border-b border-amber-800 flex items-center space-x-3">
+                <img src="../assets/img/Logo.jpg" alt="Library Logo" class="w-10 h-10 rounded-full border-2 border-amber-200">
+                <h2 class="text-xl font-bold">Library User</h2>
+            </div>
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li><a href="user-dashboard.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-amber-800 hover:text-white transition"><i class="fas fa-tachometer-alt w-5"></i><span>Dashboard</span></a></li>
+                    <li><a href="user-books.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg bg-amber-700 text-white"><i class="fas fa-book w-5"></i><span>Browse Books</span></a></li>
+                    <li><a href="user-transactions.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-amber-800 hover:text-white transition"><i class="fas fa-exchange-alt w-5"></i><span>My Transactions</span></a></li>
+                    <li><a href="user-profile.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-amber-800 hover:text-white transition"><i class="fas fa-user w-5"></i><span>Profile</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Header -->
+            <header class="bg-white dark:bg-gray-800 shadow-sm p-4 flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-[#3a2e26] dark:text-amber-200">Browse Books</h1>
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block text-amber-300"></i>
+                    </button>
+                    <div class="relative">
+                        <div id="userAvatar" class="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center text-white cursor-pointer"></div>
+                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 border dark:border-gray-700">
+                            <a href="user-profile.html" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-user mr-2"></i> Profile</a>
+                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="p-6">
+                <!-- Search and Filter Section -->
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                    <div class="relative flex-grow">
+                        <input type="text" id="bookSearch" placeholder="Search by title, author, ISBN or genre..." class="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                    <div class="flex gap-2">
+                        <select id="genreFilter" class="border rounded-md px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600">
+                            <option value="">All Genres</option>
+                        </select>
+                        <select id="availabilityFilter" class="border rounded-md px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600">
+                            <option value="">All Books</option>
+                            <option value="available">Available Only</option>
+                        </select>
+                        <button id="bookSearchBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-md shadow-md whitespace-nowrap">
+                            <i class="fas fa-filter mr-2"></i>Filter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Book Details Modal -->
+                <div id="bookDetailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 id="modalBookTitle" class="text-xl font-bold"></h3>
+                                <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <img id="modalBookCover" src="" alt="Book cover" class="w-full h-auto max-h-96 object-contain rounded-lg shadow-md">
+                                </div>
+                                <div>
+                                    <div class="space-y-3">
+                                        <p><strong class="text-amber-600 dark:text-amber-400">Author:</strong> <span id="modalBookAuthor"></span></p>
+                                        <p><strong class="text-amber-600 dark:text-amber-400">Genre:</strong> <span id="modalBookGenre"></span></p>
+                                        <p><strong class="text-amber-600 dark:text-amber-400">ISBN:</strong> <span id="modalBookIsbn"></span></p>
+                                        <p><strong class="text-amber-600 dark:text-amber-400">Availability:</strong> <span id="modalBookAvailability"></span></p>
+                                        <p><strong class="text-amber-600 dark:text-amber-400">Description:</strong></p>
+                                        <p id="modalBookDescription" class="text-gray-700 dark:text-gray-300"></p>
+                                    </div>
+                                    <div class="mt-6 flex flex-wrap gap-3">
+                                        <button id="borrowBtn" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-md shadow-md">
+                                            <i class="fas fa-book-reader mr-2"></i>Borrow Book
+                                        </button>
+                                        <button id="closeModalBtn" class="border border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-md shadow-md">
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loadingIndicator" class="hidden flex justify-center items-center py-12">
+                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden text-center py-12">
+                    <i class="fas fa-book-open text-5xl text-gray-400 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-600 dark:text-gray-300">No books found</h3>
+                    <p class="text-gray-500 mt-2">Try adjusting your search or filter criteria</p>
+                </div>
+
+                <!-- Books List -->
+                <div id="booksList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+
+                <!-- Pagination -->
+                <div id="booksPagination" class="mt-6 flex justify-center items-center gap-2"></div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../assets/js/user.js"></script>
+    <script type="module" src="../assets/js/theme.js"></script>
+    <script>
+        // Handle modal closing when clicking outside
+        document.getElementById('bookDetailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

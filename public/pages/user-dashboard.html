@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Library - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap">
+    <link href="../assets/img/Logo.jpg" rel="icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar-collapsed {
+            width: 5rem;
+        }
+        .sidebar-collapsed .sidebar-item-text,
+        .sidebar-collapsed .sidebar-header h2,
+        .sidebar-collapsed .sidebar-footer p {
+            display: none;
+        }
+        .sidebar-collapsed .sidebar-item {
+            justify-content: center;
+        }
+        .dark .dark\:bg-dark-900 {
+            background-color: #121218;
+        }
+        .dark .dark\:bg-dark-800 {
+            background-color: #1e1e2d;
+        }
+        .dark .dark\:text-light-100 {
+            color: #f8f9fa;
+        }
+        .dark .dark\:border-dark-700 {
+            border-color: #2d2d3a;
+        }
+        .welcome-card {
+            background: linear-gradient(135deg, #b87b4a 0%, #8a5735 100%);
+        }
+        .dark .welcome-card {
+            background: linear-gradient(135deg, #6f462d 0%, #5c3a26 100%);
+        }
+        .overdue-card {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-800 dark:bg-dark-900 dark:text-light-100 transition-colors duration-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar bg-primary-800 text-white flex-shrink-0 transition-all duration-300 ease-in-out">
+            <div class="sidebar-header p-4 border-b border-primary-700 flex items-center space-x-3">
+                <img src="../assets/img/Logo.jpg" alt="Library Logo" class="w-10 h-10 rounded-full border-2 border-amber-200">
+                <h2 class="text-xl font-bold sidebar-header-text">Library User</h2>
+            </div>
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="user-dashboard.html" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg bg-primary-700 text-white">
+                            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                            <span class="sidebar-item-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="user-books.html" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-primary-700 hover:text-white transition">
+                            <i class="fas fa-book w-5 text-center"></i>
+                            <span class="sidebar-item-text">Browse Books</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="user-transactions.html" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-primary-700 hover:text-white transition">
+                            <i class="fas fa-exchange-alt w-5 text-center"></i>
+                            <span class="sidebar-item-text">My Transactions</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="user-profile.html" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-primary-700 hover:text-white transition">
+                            <i class="fas fa-user-cog w-5 text-center"></i>
+                            <span class="sidebar-item-text">My Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer absolute bottom-0 w-full p-4 text-center text-sm text-primary-200 border-t border-primary-700">
+                <p>Library System v1.0</p>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-auto">
+            <!-- Top Navigation Bar -->
+            <header class="bg-white dark:bg-dark-800 shadow-sm p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button class="sidebar-toggle text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold text-primary-800 dark:text-primary-300">My Library Dashboard</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="theme-toggle p-2 rounded-full hover:bg-gray-200 dark:hover:bg-dark-700 transition">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:block text-amber-300"></i>
+                    </button>
+                    <div class="user-profile relative">
+                        <div class="user-avatar cursor-pointer w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white" id="userAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-dropdown hidden absolute right-0 mt-2 w-64 bg-white dark:bg-dark-800 rounded-md shadow-lg z-10 border dark:border-dark-700" id="userDropdown">
+                            <div class="dropdown-header p-4 border-b dark:border-dark-700 flex items-center space-x-3">
+                                <div class="avatar w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-300">
+                                    <i class="fas fa-user-circle text-2xl"></i>
+                                </div>
+                                <div class="user-info">
+                                    <p class="user-name font-medium dark:text-white" id="userName">Library User</p>
+                                    <p class="user-email text-sm text-gray-600 dark:text-gray-400" id="userEmail">user@library.edu</p>
+                                </div>
+                            </div>
+                            <div class="dropdown-links p-2">
+                                <a href="user-profile.html" class="dropdown-link block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700 rounded transition">
+                                    <i class="fas fa-user mr-2"></i> My Profile
+                                </a>
+                                <a href="#" id="logoutBtn" class="dropdown-link block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700 rounded transition">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Dashboard Content -->
+            <div class="p-6">
+                <!-- Welcome Card -->
+                <div class="welcome-card text-white rounded-lg shadow-lg mb-8 p-6 flex justify-between items-center">
+                    <div class="welcome-text max-w-2xl">
+                        <h2 class="text-2xl font-bold mb-2">Welcome back, <span id="welcomeName" class="text-amber-200">Reader</span>!</h2>
+                        <p class="opacity-90">Your personal library dashboard helps you track your borrowed books and reading history.</p>
+                    </div>
+                    <div class="welcome-icon text-6xl opacity-20">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card bg-white dark:bg-dark-800 rounded-lg shadow-md p-6 transition duration-300 hover:shadow-lg dark:hover:shadow-xl dark:hover:shadow-black/30 border dark:border-dark-700">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 mr-4">
+                                <i class="fas fa-bookmark text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Borrowed</h3>
+                                <p class="text-2xl font-bold text-gray-800 dark:text-white" id="totalBorrowed">0</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">All books you've borrowed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card bg-white dark:bg-dark-800 rounded-lg shadow-md p-6 transition duration-300 hover:shadow-lg dark:hover:shadow-xl dark:hover:shadow-black/30 border dark:border-dark-700">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-300 mr-4">
+                                <i class="fas fa-book-open text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-gray-500 dark:text-gray-400 text-sm font-medium">Currently Reading</h3>
+                                <p class="text-2xl font-bold text-gray-800 dark:text-white" id="currentlyBorrowed">0</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Books you're reading now</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card bg-white dark:bg-dark-800 rounded-lg shadow-md p-6 transition duration-300 hover:shadow-lg dark:hover:shadow-xl dark:hover:shadow-black/30 border dark:border-dark-700 overdue-card">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-300 mr-4">
+                                <i class="fas fa-exclamation-circle text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-gray-500 dark:text-gray-400 text-sm font-medium">Overdue Books</h3>
+                                <p class="text-2xl font-bold text-gray-800 dark:text-white" id="overdueBooks">0</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Books past due date</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Current Loans Section -->
+                <div class="dashboard-section bg-white dark:bg-dark-800 rounded-lg shadow-md mb-8 border dark:border-dark-700">
+                    <div class="section-header p-4 border-b dark:border-dark-700 flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-primary-800 dark:text-primary-300 flex items-center">
+                            <i class="fas fa-clock mr-2 text-primary-600 dark:text-primary-400"></i> Active Loans
+                        </h2>
+                        <a href="user-transactions.html" class="text-sm text-primary-600 dark:text-primary-400 hover:underline">View All</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
+                            <thead class="bg-gray-50 dark:bg-dark-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Book Title</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Author</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Borrowed</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Due Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Days Left</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-dark-800 divide-y divide-gray-200 dark:divide-dark-700" id="activeLoansTable">
+                                <!-- Active loans will be loaded here -->
+                                <tr>
+                                    <td colspan="7" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Loading your active loans...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Overdue Books Section (if any) -->
+                <div class="dashboard-section bg-white dark:bg-dark-800 rounded-lg shadow-md mb-8 border dark:border-dark-700 hidden" id="overdueBooksSection">
+                    <div class="section-header p-4 border-b dark:border-dark-700 flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-red-600 dark:text-red-400 flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> Overdue Books
+                        </h2>
+                        <span class="text-sm text-red-600 dark:text-red-400">Please return these books</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
+                            <thead class="bg-gray-50 dark:bg-dark-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Book Title</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Author</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Due Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Days Overdue</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-dark-800 divide-y divide-gray-200 dark:divide-dark-700" id="overdueBooksTable">
+                                <!-- Overdue books will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="dashboard-section bg-white dark:bg-dark-800 rounded-lg shadow-md border dark:border-dark-700">
+                    <div class="section-header p-4 border-b dark:border-dark-700">
+                        <h2 class="text-xl font-bold text-primary-800 dark:text-primary-300 flex items-center">
+                            <i class="fas fa-bolt mr-2 text-primary-600 dark:text-primary-400"></i> Quick Actions
+                        </h2>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+                        <a href="user-books.html" class="action-card bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg p-6 text-center transition duration-300 border border-transparent hover:border-blue-200 dark:hover:border-blue-800">
+                            <div class="text-blue-600 dark:text-blue-300 mb-3">
+                                <i class="fas fa-search text-3xl"></i>
+                            </div>
+                            <span class="font-medium text-gray-800 dark:text-white">Browse Catalog</span>
+                        </a>
+                        <a href="user-transactions.html" class="action-card bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-lg p-6 text-center transition duration-300 border border-transparent hover:border-purple-200 dark:hover:border-purple-800">
+                            <div class="text-purple-600 dark:text-purple-300 mb-3">
+                                <i class="fas fa-history text-3xl"></i>
+                            </div>
+                            <span class="font-medium text-gray-800 dark:text-white">Loan History</span>
+                        </a>
+                        <a href="user-profile.html" class="action-card bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg p-6 text-center transition duration-300 border border-transparent hover:border-green-200 dark:hover:border-green-800">
+                            <div class="text-green-600 dark:text-green-300 mb-3">
+                                <i class="fas fa-user-edit text-3xl"></i>
+                            </div>
+                            <span class="font-medium text-gray-800 dark:text-white">Update Profile</span>
+                        </a>
+                        <a href="user-books.html?featured=true" class="action-card bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded-lg p-6 text-center transition duration-300 border border-transparent hover:border-amber-200 dark:hover:border-amber-800">
+                            <div class="text-amber-600 dark:text-amber-300 mb-3">
+                                <i class="fas fa-star text-3xl"></i>
+                            </div>
+                            <span class="font-medium text-gray-800 dark:text-white">Featured Books</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../assets/js/user.js"></script>
+    <script type="module" src="../assets/js/common.js"></script>
+    <script type="module" src="../assets/js/theme.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Library System - Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/tailwind.output.css" />
+  <link rel="icon" href="../assets/img/Logo.jpg" />
+  <style>
+    .form-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .input-field {
+      transition: all 0.3s ease;
+      border-color: #d1d5db;
+    }
+    .input-field:focus {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    .register-btn {
+      background-image: linear-gradient(to right, #10b981, #059669);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .register-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    .select-arrow {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6b7280;
+    }
+    .password-toggle:hover {
+      color: #4b5563;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url('../assets/img/Bookjpg.jpg'); background-position: center 30%;">
+  <div class="absolute inset-0 bg-[#3a2e26] bg-opacity-80"></div>
+
+  <div class="relative z-10 min-h-screen flex flex-col justify-center items-center px-4 py-8">
+    <div class="form-container shadow-2xl rounded-xl w-full max-w-md p-8">
+      <div class="flex flex-col items-center mb-8">
+        <div class="bg-amber-100 p-2 rounded-full shadow-md mb-3">
+          <img src="../assets/img/Logo.jpg" alt="Library Logo" class="w-16 h-16 rounded-full border-2 border-amber-200"/>
+        </div>
+        <h1 class="text-3xl font-bold text-[#3a2e26] font-serif">Library Portal</h1>
+        <p class="text-sm text-gray-600 mt-1">Begin your academic journey</p>
+      </div>
+
+      <h2 class="text-xl font-semibold text-center text-[#5c4a3a] mb-6 border-b pb-2">Create Account</h2>
+
+      <form id="registerForm" class="space-y-5">
+        <div>
+          <label for="name" class="block text-sm font-medium text-[#5c4a3a] mb-1">Full Name</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <input type="text" id="name" name="name" required
+              class="input-field w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
+              placeholder=" Name"/>
+          </div>
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-[#5c4a3a] mb-1">Email Address</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+              </svg>
+            </div>
+            <input type="email" id="email" name="email" required
+              class="input-field w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
+              placeholder="student@gmail.com"/>
+          </div>
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-[#5c4a3a] mb-1">Password</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <input type="password" id="password" name="password" required minlength="8"
+              class="input-field w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
+              placeholder="••••••••"/>
+            <div class="password-toggle" onclick="togglePassword('password')">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters with uppercase, lowercase, number, and symbol</p>
+        </div>
+        <div>
+          <label for="password_confirmation" class="block text-sm font-medium text-[#5c4a3a] mb-1">Confirm Password</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8"
+              class="input-field w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
+              placeholder="••••••••"/>
+            <div class="password-toggle" onclick="togglePassword('password_confirmation')">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <button type="submit"
+          class="register-btn w-full text-white py-3 rounded-lg text-lg font-semibold transition duration-300">
+          Create Account
+        </button>
+      </form>
+      <div id="error-message" class="mt-2 text-sm text-red-700 bg-red-100 border border-red-300 rounded-md px-4 py-3 hidden shadow-md transition-all duration-300 ease-in-out">
+        <!-- Error message will appear here -->
+      </div>
+      <div class="mt-6 text-center text-sm">
+        <p class="text-gray-600">Already have an account?</p>
+        <a href="login.html" class="font-medium text-green-600 hover:text-green-500">Sign in here →</a>
+      </div>
+    </div>
+    
+    <footer class="mt-8 text-sm text-white text-center z-10">
+      <p>&copy; 2025 University Library. All rights reserved.</p>
+      <p class="mt-1 text-amber-100 opacity-80">Knowledge · Discovery · Inspiration</p>
+    </footer>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    function togglePassword(fieldId) {
+      const passwordField = document.getElementById(fieldId);
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+    }
+  </script>
+</body>
+</html>
